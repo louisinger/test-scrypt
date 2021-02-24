@@ -1,0 +1,29 @@
+<html>
+  <body>
+    <div><span id="progress"></span>% complete...</div>
+
+    <script src="scryptlib.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+      const password = Uint8Array.from("000000")
+      const salt = Uint8Array.from("saltsaltsaltsaltsaltsaltsaltsaltsaltsaltsaltsaltsalt")
+
+      const N = 36384, r = 16, p = 1;
+      const dkLen = 32;
+
+      function updateInterface(progress) {
+          document.getElementById("progress").textContent = Math.trunc(100 * progress);
+      }
+
+      // Async
+      console.time('time')
+      const keyPromise = scrypt.scrypt(password, salt, N, r, p, dkLen, updateInterface);
+
+      keyPromise.then(function(key) {
+          console.timeEnd('time')
+          console.log("Derived Key (async): ", key);
+      });
+
+    </script>
+  </body>
+</html>
